@@ -5,20 +5,22 @@ import "./init";
 import { useState, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { useLocation } from "react-router-dom";
 
 //Saadaan player olio mikä sisältää ,isHost, code yms
-const GameLobby = ({ player_ }) => {
+const GameLobby = () => {
 
-  //simuloitu player
+  const {state} = useLocation();
+  /*//simuloitu player
   const player = {
     userName: 'TestiPelaaja',
     code: '123abc',
     isHost: true
-  }
+  } */
   // Osallistujien listan tila
   const [playerList, setPlayerList] = useState([]);
 
-  const [currentPlayer, setCurrentPlayer] = useState(player);
+  const [currentPlayer, setCurrentPlayer] = useState(state.player);
 
   //Stomp client määritys, brokerURL = ws:<SockJS osoite>
   //Alempi SockJS "emuloi" WS yhteyttä, käytännössä kääntää http metodilla saadun osoitteen ws metodille
@@ -50,29 +52,64 @@ const GameLobby = ({ player_ }) => {
   }
 
   client.onDisconnect = () => {
-    // TODO: Disconnect event käsittely
+    fetch('http://localhost:8080/wsapi/lobby', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(currentPlayer)
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
+
+  const checkConnection = () => {
+    return client.connected;
+  }
+
+  const handleReconnect = () => {
+    client.activate();
+  }
+
+  const handleBeforeUnload = (e) => {
+    e.preventDefault();
+    console.log('testi');
+    //client.deactivate();
   }
 
   useEffect(() => {
     // TODO: Toteuta WS-integraatio
+    console.log(location.state);
     client.activate();
 
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    }
   }, []);
 
   return (
-    <div>
-       <h1>Treffipeli</h1> 
-      <h1>Lobby</h1>
-      <p>Game pin: {currentPlayer.code}</p>
-      <ul>
-        {playerList.map((player) => (
-          <li key={player.key}>{player.userName}</li>
-        ))}
-      </ul>
-      {currentPlayer.isHost && <button>Start game</button>}
-      <button onClick={() => client.activate()}>Testi join</button>
-      <button onClick={() => console.log(playerList)}>Testi tulosta lista</button>
-    </div>
+      <div>
+        {checkConnection ? 
+        <>
+          <h1>Treffipeli</h1> 
+          <h1>Lobby</h1>
+          <p>Game pin: {currentPlayer.code}</p>
+          <ul>
+            {playerList.map((player) => (
+              <li key={player.key}>{player.userName}</li>
+            ))}
+          </ul>
+          {currentPlayer.isHost && <button>Start game</button>}
+          <button onClick={() => console.log(checkConnection())}>Testi status</button>
+          <button onClick={() => client.deactivate({force: true})}>Testi disconnect</button>
+        </> :
+        <>
+          <button onClick={() => handleReconnect()}>Rejoin</button>
+        </>}
+      </div>
   );
 };
 

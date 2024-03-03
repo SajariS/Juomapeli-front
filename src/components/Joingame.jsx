@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 const JoinGame = () => {
   const [gamePin, setGamePin] = useState('');
   const navigate = useNavigate();
+  //Demo 
+  const player = {
+    userName: 'testi',
+    code: '123abc',
+    isHost: true
+  }
 
   const handleJoinGame = () => {
     // Kutsu rajapintaa käyttäjän luontiin
@@ -11,7 +17,7 @@ const JoinGame = () => {
     // ...
 
     // Siirry gamelobby-sivulle
-    navigate('/gamelobby');
+    navigate('/gamelobby', { state: { player }});
   };
 
   return (

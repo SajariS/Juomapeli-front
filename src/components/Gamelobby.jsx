@@ -51,6 +51,7 @@ const GameLobby = () => {
     client.publish({destination: '/app/join/' + currentPlayer.code, body: JSON.stringify(currentPlayer)})
   }
 
+  //Vaatii aijemman komponentin toimimaan, poisto perustuu palvelimen puolella id:seen, jota on vaikeampi simuloida 
   client.onDisconnect = () => {
     fetch('http://localhost:8080/wsapi/lobby', {
       method: 'DELETE',

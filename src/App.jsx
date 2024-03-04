@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import GameLobby from './components/Gamelobby';
 import Joingame from './components/Joingame';
+import FrontPage from './components/Frontpage';
 
 function App() {
 
@@ -12,9 +13,10 @@ function App() {
       <Router>
         <Container>
           <Routes>
-            <Route path="/" element={<Cards />} />
+            <Route path="/" element={<FrontPage />} />
             <Route path="/gamelobby" element={<GameLobby />} />
             <Route path="/joingame" element={<Joingame />} />
+            <Route path="/cards" element={<Cards />} />
           </Routes>
         </Container>
       </Router>     

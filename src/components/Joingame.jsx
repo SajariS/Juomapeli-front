@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navigation from './Navigation';
 
 const JoinGame = () => {
   const [gamePin, setGamePin] = useState('');
@@ -16,6 +17,8 @@ const JoinGame = () => {
 
   return (
     <div>
+      <Navigation />
+      <br />
       <h1>Liity peliin</h1>
       <p>Anna pelin PIN-koodi:</p>
       <input

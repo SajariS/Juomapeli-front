@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Navigation from './Navigation';
 
 function Cards() {
   const [goodCards, setGoodCards] = useState([{ id: 'good1', content: '' }]);
@@ -34,6 +35,8 @@ function Cards() {
 
   return (
     <div className="container">
+    <Navigation />
+      <br />
       <h1>Treffipeli</h1>
       <p>Kirjoita kolme hyvää piirrettä fiktiivisestä treffikumppanistasi:</p>
       <div className="cards">

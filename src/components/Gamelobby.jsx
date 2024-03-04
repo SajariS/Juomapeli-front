@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navigation from './Navigation';
 
 const GameLobby = ({ players, code, isHost }) => {
   // Osallistujien listan tila
@@ -18,7 +19,10 @@ const GameLobby = ({ players, code, isHost }) => {
 
   return (
     <div>
-       <h1>Treffipeli</h1> 
+      <Navigation />
+      <br />
+
+      <h1>Treffipeli</h1>
       <h1>Lobby</h1>
       <p>Game pin: {code}</p>
       <ul>

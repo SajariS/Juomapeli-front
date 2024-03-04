@@ -12,13 +12,13 @@ const Navigation = () => {
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="/gamelobby">
-                        Gamelobby
+                    <NavLink to="/joingame">
+                        Peliin liittyminen
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="/joingame">
-                        Peliin liittyminen
+                    <NavLink to="/gamelobby">
+                        Gamelobby
                     </NavLink>
                 </li>
                 <li>

@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useLocation } from "react-router-dom";
+import Navigation from './Navigation';
+
 
 //Saadaan player olio mikä sisältää ,isHost, code yms
 const GameLobby = () => {
@@ -93,6 +95,8 @@ const GameLobby = () => {
 
   return (
       <div>
+          <Navigation />
+        <br />
         {checkConnection ? 
         <>
           <h1>Treffipeli</h1> 

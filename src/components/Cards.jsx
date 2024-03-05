@@ -10,8 +10,8 @@ function Cards() {
       const newId = `good${goodCards.length + 1}`;
       setGoodCards([...goodCards, { id: newId, content: '' }]);
     }
-  };
-
+  }; 
+//TESTI EI TARVII VALITTAAA TEKSTISTA
   const addBadCard = () => {
     if (badCards.length < 3) {
         const newId = `bad${badCards.length + 1}`;

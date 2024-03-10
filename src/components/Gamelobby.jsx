@@ -5,24 +5,21 @@ import "./init";
 import { useState, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from './Navigation';
 
 
 //Saadaan player olio mikä sisältää ,isHost, code yms
 const GameLobby = () => {
 
+  const navigate = useNavigate();
   const {state} = useLocation();
-  /*//simuloitu player
-  const player = {
-    userName: 'TestiPelaaja',
-    code: '123abc',
-    isHost: true
-  } */
+  
+  const [pin, setPin] = useState('');
+  const [host, setHost] = useState(false);
+
   // Osallistujien listan tila
   const [playerList, setPlayerList] = useState([]);
-
-  const [currentPlayer, setCurrentPlayer] = useState(state.player);
 
   //Stomp client määritys, brokerURL = ws:<SockJS osoite>
   //Alempi SockJS "emuloi" WS yhteyttä, käytännössä kääntää http metodilla saadun osoitteen ws metodille
@@ -40,7 +37,7 @@ const GameLobby = () => {
   }
 
   client.onConnect = () => {
-    client.subscribe('/lobby/' + currentPlayer.code, (courier) => {
+    client.subscribe('/lobby/' + state.player.code, (courier) => {
       const recievedList = JSON.parse(courier.body)
       //Lista pakko käsitellä, koska map ei syystä tai toisesta hyväksy key arvoksi id:tä suoraan
       setPlayerList(recievedList.map((item, _) => {
@@ -50,7 +47,7 @@ const GameLobby = () => {
         }
       }))
     });
-    client.publish({destination: '/app/join/' + currentPlayer.code, body: JSON.stringify(currentPlayer)})
+    client.publish({destination: '/app/join/' + state.player.code, body: JSON.stringify(state.player)})
   }
 
   //Vaatii aijemman komponentin toimimaan, poisto perustuu palvelimen puolella id:seen, jota on vaikeampi simuloida 
@@ -60,7 +57,7 @@ const GameLobby = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(currentPlayer)
+      body: JSON.stringify(state.player)
     })
     .catch(error => {
       console.error(error);
@@ -82,9 +79,17 @@ const GameLobby = () => {
   }
 
   useEffect(() => {
-    // TODO: Toteuta WS-integraatio
-    console.log(location.state);
-    client.activate();
+    // TODO: Toteuta WS-integraatio, poisto
+
+    //Tarkastetaan onko state tyhjä ja käsitellään dataa tai siirretään takaisin etusivulle
+    if(!state) {
+      navigate('/');
+    }
+    else {
+      setPin(state.player.code);
+      setHost(state.player.isHost);
+      client.activate();
+    }
 
     window.addEventListener('beforeunload', handleBeforeUnload);
 
@@ -101,13 +106,13 @@ const GameLobby = () => {
         <>
           <h1>Treffipeli</h1> 
           <h1>Lobby</h1>
-          <p>Game pin: {currentPlayer.code}</p>
+          <p>Game pin: {pin}</p>
           <ul>
             {playerList.map((player) => (
               <li key={player.key}>{player.userName}</li>
             ))}
           </ul>
-          {currentPlayer.isHost && <button>Start game</button>}
+          {host && <button>Start game</button>}
           <button onClick={() => console.log(checkConnection())}>Testi status</button>
           <button onClick={() => client.deactivate({force: true})}>Testi disconnect</button>
         </> :

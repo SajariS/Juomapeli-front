@@ -17,6 +17,9 @@ const GameLobby = () => {
   
   const [pin, setPin] = useState('');
   const [host, setHost] = useState(false);
+  const [connected, setConnected] = useState(false);
+
+  const [player, setPlayer] = useState(null);
 
   // Osallistujien listan tila
   const [playerList, setPlayerList] = useState([]);
@@ -37,6 +40,7 @@ const GameLobby = () => {
   }
 
   client.onConnect = () => {
+    setConnected(true);
     client.subscribe('/lobby/' + state.player.code, (courier) => {
       const recievedList = JSON.parse(courier.body)
       //Lista pakko käsitellä, koska map ei syystä tai toisesta hyväksy key arvoksi id:tä suoraan
@@ -50,36 +54,30 @@ const GameLobby = () => {
     client.publish({destination: '/app/join/' + state.player.code, body: JSON.stringify(state.player)})
   }
 
-  //Vaatii aijemman komponentin toimimaan, poisto perustuu palvelimen puolella id:seen, jota on vaikeampi simuloida 
+  //Lähettää lähtökohtaisesti beforeUnload eventin yhteydessä pyynnön palvelimelle
+  //Palvelin poistaa pelaajan ja lähettää socketin kautta "viestin", joka päivttää pelaajien listat
   client.onDisconnect = () => {
-    fetch('http://localhost:8080/wsapi/lobby', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(state.player)
-    })
+    fetch('http://localhost:8080/wsapi/lobby/' + state.player.id, { method: 'DELETE'})
     .catch(error => {
       console.error(error);
     })
   }
 
-  const checkConnection = () => {
-    return client.connected;
-  }
-
-  const handleReconnect = () => {
-    client.activate();
-  }
-
   const handleBeforeUnload = (e) => {
     e.preventDefault();
-    console.log('testi');
-    //client.deactivate();
+    client.unsubscribe();
+    client.deactivate();
+    setConnected(false);
+  }
+
+  const handleRejoin = () => {
+    //Voi jatkokehittää jos riittää aika, vaatii aika paljon, koska pelaaja poistetaan kannasta asti, eli ID vaihtuu
+    // useState pelaajalla, tuo reactin batchien kanssa aika paljon sekoilua WS:än yhteydessä varsinkin
+    navigate('/joingame');
   }
 
   useEffect(() => {
-    // TODO: Toteuta WS-integraatio, poisto
+    // TODO: Toteuta WS-integraatio, 
 
     //Tarkastetaan onko state tyhjä ja käsitellään dataa tai siirretään takaisin etusivulle
     if(!state) {
@@ -103,7 +101,7 @@ const GameLobby = () => {
       <div>
           <Navigation />
         <br />
-        {checkConnection ? 
+        {connected ? 
         <>
           <h1>Treffipeli</h1> 
           <h1>Lobby</h1>
@@ -114,11 +112,9 @@ const GameLobby = () => {
             ))}
           </ul>
           {host && <button>Start game</button>}
-          <button onClick={() => console.log(checkConnection())}>Testi status</button>
-          <button onClick={() => client.deactivate({force: true})}>Testi disconnect</button>
         </> :
         <>
-          <button onClick={() => handleReconnect()}>Rejoin</button>
+          <button onClick={() => handleRejoin()}>Rejoin</button>
         </>}
       </div>
   );

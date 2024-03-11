@@ -114,12 +114,6 @@ const GameLobby = () => {
             ))}
           </ul>
           {host && <button>Start game</button>}
-          <Button
-            onClick={() => console.log(wsUrl, apiUrl, sockUrl)}
-            title="testi"
-            >
-              awda
-              </Button>
         </> :
         <>
           <button onClick={() => handleRejoin()}>Rejoin</button>

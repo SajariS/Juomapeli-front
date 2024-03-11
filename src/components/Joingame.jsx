@@ -7,9 +7,10 @@ const JoinGame = () => {
   const [gamePin, setGamePin] = useState('');
   const [playerName, setPlayerName] = useState('');
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_PUBLIC_API_URL;
 
   const handleJoinGame = () => {
-    fetch('http://localhost:8080/api/players', {
+    fetch(apiUrl + '/api/players', {
       method: 'POST',
       headers: { 'Content-type':'application/json'},
       body: JSON.stringify({

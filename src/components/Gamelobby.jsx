@@ -7,10 +7,15 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from './Navigation';
+import { Button } from "@mui/material";
 
 
 //Saadaan player olio mikä sisältää ,isHost, code yms
 const GameLobby = () => {
+
+  const wsUrl = import.meta.env.VITE_PUBLIC_WS_URL;
+  const apiUrl = import.meta.env.VITE_PUBLIC_API_URL;
+  const sockUrl = import.meta.env.VITE_PUBLIC_SOCK_URL;
 
   const navigate = useNavigate();
   const {state} = useLocation();
@@ -19,15 +24,13 @@ const GameLobby = () => {
   const [host, setHost] = useState(false);
   const [connected, setConnected] = useState(false);
 
-  const [player, setPlayer] = useState(null);
-
   // Osallistujien listan tila
   const [playerList, setPlayerList] = useState([]);
 
   //Stomp client määritys, brokerURL = ws:<SockJS osoite>
   //Alempi SockJS "emuloi" WS yhteyttä, käytännössä kääntää http metodilla saadun osoitteen ws metodille
   const client = new Client({
-    brokerURL: 'ws://localhost:8080/ws',
+    brokerURL: wsUrl,
     connectHeaders: {
       //Headers, tulevaisuutta varten
     },
@@ -36,7 +39,7 @@ const GameLobby = () => {
 
   //SockJS määritys
   client.webSocketFactory = () => {
-    return new SockJS('http://localhost:8080/ws');
+    return new SockJS(sockUrl);
   }
 
   client.onConnect = () => {
@@ -57,7 +60,7 @@ const GameLobby = () => {
   //Lähettää lähtökohtaisesti beforeUnload eventin yhteydessä pyynnön palvelimelle
   //Palvelin poistaa pelaajan ja lähettää socketin kautta "viestin", joka päivttää pelaajien listat
   client.onDisconnect = () => {
-    fetch('http://localhost:8080/wsapi/lobby/' + state.player.id, { method: 'DELETE'})
+    fetch(apiUrl + '/wsapi/lobby/' + state.player.id, { method: 'DELETE'})
     .catch(error => {
       console.error(error);
     })
@@ -77,7 +80,6 @@ const GameLobby = () => {
   }
 
   useEffect(() => {
-    // TODO: Toteuta WS-integraatio, 
 
     //Tarkastetaan onko state tyhjä ja käsitellään dataa tai siirretään takaisin etusivulle
     if(!state) {
@@ -112,6 +114,12 @@ const GameLobby = () => {
             ))}
           </ul>
           {host && <button>Start game</button>}
+          <Button
+            onClick={() => console.log(wsUrl, apiUrl, sockUrl)}
+            title="testi"
+            >
+              awda
+              </Button>
         </> :
         <>
           <button onClick={() => handleRejoin()}>Rejoin</button>

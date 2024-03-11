@@ -86,6 +86,7 @@ const GameLobby = () => {
       navigate('/');
     }
     else {
+      console.log(state.player);
       setPin(state.player.code);
       setHost(state.player.isHost);
       client.activate();

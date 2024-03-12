@@ -25,29 +25,13 @@ const FrontPage = () => {
         } 
             const pin = generateRandomPin();
             setGamepin(pin);
-        fetch(apiUrl + '/api/players', {
-            method: 'POST',
-            headers: { 'Contet-type' : 'application/json'},
-            body: JSON.stringify({
-                userName: username,
-                code: pin,
-                isHost: true,
-            })
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Error when joining: " + response.statusText);
-          }
-          else {
-            return response.json();
-          }
-        })
-        //Data korvattu player, vaikuttaa GameLobbyn hallintaan
-        .then(player => {
-          navigate('/gamelobby', { state: { player }});
-        })
-        .catch(err => console.error(err))
-      };
+
+            navigate('/gamelobby',{state: {player:
+                {userName: username, 
+                    isHost: true, 
+                    code: pin}}
+                });
+    };
 
     const handleJoinGame = () => {
         if (username.trim() === '') {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Navigation from './Navigation';
+import Logo from './Logo';
 
 function Cards() {
   const [goodCards, setGoodCards] = useState([{ id: 'good1', content: '' }]);
@@ -37,7 +38,8 @@ function Cards() {
     <div className="container">
     <Navigation />
       <br />
-      <h1>Treffipeli</h1>
+      <Logo />
+      <div className='body'>
       <p>Kirjoita kolme hyvää piirrettä fiktiivisestä treffikumppanistasi:</p>
       <div className="cards">
         {goodCards.map(card => (
@@ -69,6 +71,7 @@ function Cards() {
         ))}
       </div>
       {badCards.length < 3 && <button className="add-card-btn" onClick={addBadCard}>Lisää huono piirre</button>}
+      </div>
     </div>
   );
 }

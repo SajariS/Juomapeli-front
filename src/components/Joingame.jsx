@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from './Navigation';
 import { Input } from '@mui/material';
+import Logo from './Logo';
 
 const JoinGame = () => {
   const [gamePin, setGamePin] = useState('');
@@ -36,9 +37,12 @@ const JoinGame = () => {
 
 
   return (
-    <div>
+    <>
       <Navigation />
       <br />
+      <Logo />
+      <br />
+      <div className='body'>
       <h1>Liity peliin</h1>
       <p>Anna pelin PIN-koodi:</p>
       <Input
@@ -54,7 +58,8 @@ const JoinGame = () => {
         placeholder='Nimi'
       />
       <button onClick={handleJoinGame}>Liity peliin</button>
-    </div>
+      </div>
+    </>
   );
 };
 

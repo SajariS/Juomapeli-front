@@ -8,6 +8,7 @@ import SockJS from 'sockjs-client';
 import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from './Navigation';
 import { Button } from "@mui/material";
+import Logo from './Logo';
 
 
 //Saadaan player olio mikä sisältää ,isHost, code yms
@@ -100,12 +101,12 @@ const GameLobby = () => {
   }, []);
 
   return (
-      <div>
-          <Navigation />
+      <>
+        <Navigation />
         <br />
+        <Logo />
         {connected ? 
-        <>
-          <h1>Treffipeli</h1> 
+        <div className='body'>
           <h1>Lobby</h1>
           <p>Game pin: {pin}</p>
           <ul>
@@ -114,11 +115,11 @@ const GameLobby = () => {
             ))}
           </ul>
           {host && <button>Start game</button>}
-        </> :
+        </div> :
         <>
           <button onClick={() => handleRejoin()}>Rejoin</button>
         </>}
-      </div>
+      </>
   );
 };
 

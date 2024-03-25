@@ -5,8 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background: rgb(159,127,255);
-  background: linear-gradient(142deg, rgba(159,127,255,1) 0%, rgba(128,85,254,1) 79%);
+  background: linear-gradient(to bottom right, rgba(159,127,255,1), rgba(150,115,254,1) 25%, rgba(132,91,254,1) 50%, rgba(127,84,253,1) 75%);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,29 +38,132 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   margin-right: 10px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: rgba(40,10,130,255);
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.body {
+  padding: 20px;
+  font-size: 16px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  background-color: #FFF;
+  color: #333;
+  transition: border-color 0.3s;
+}
+
+div.logo {
+  height: 50px;
+}
+
+.logo {
+  color: #ff9051;
+  text-shadow: -2px -2px 0 white,  
+                4px -2px 0 white,
+               -2px  2px 0 white,
+                4px  2px 0 white;
+  font-size: 48px;
+  font-weight: bold;
+  padding: 0;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.manual {
+  background-color: #fff;
+  color: #ff9051;
+  margin-right: 100px;
+  border: none;
+  border-radius: 50%;
+  width: 50px; 
+  height: 50px; 
+  font-size: 24px; 
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: rgba(209,209,209,255);
+  color: #333;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+  padding: 10px;
+}
+
+textarea {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: rgba(209,209,209,255);
+  color: #333;
+  transition: border-color 0.3s;
+}
+
+.card {
+  padding: 2em;
+  
 }
 
 .navigation ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  margin-right: 20px;
 }
 
 .navigation li {

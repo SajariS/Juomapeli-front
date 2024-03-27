@@ -1,7 +1,7 @@
 
 const apiUrl = import.meta.env.VITE_PUBLIC_API_URL;
 const userName = import.meta.env.VITE_PUBLIC_USERNAME;
-const password = import.meta.env.VITE_PUBLIC_USERNAME;
+const password = import.meta.env.VITE_PUBLIC_PASSWORD;
 
 const TokenFetch = {
 
